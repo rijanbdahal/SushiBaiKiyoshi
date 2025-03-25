@@ -20,7 +20,7 @@ const ReceiveFish = () => {
 
     const fetchInventory = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/receivefish/getInventory");
+            const response = await axios.get("http://localhost:5001/receivefish/getInventory");
             setInventory(response.data);
         } catch (error) {
             console.error("Error fetching inventory:", error);
@@ -29,7 +29,7 @@ const ReceiveFish = () => {
 
     const fetchReceivedFish = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/receivefish/getReceivedFish");
+            const response = await axios.get("http://localhost:5001/receivefish/getReceivedFish");
             setReceivedFish(response.data);
         } catch (error) {
             console.error("Error fetching received fish entries:", error);
@@ -60,7 +60,7 @@ const ReceiveFish = () => {
         };
 
         try {
-            await axios.post("http://localhost:5000/receivefish", payload);
+            await axios.post("http://localhost:5001/receivefish", payload);
             alert("Inventory updated successfully.");
             setSelectedFish("");
             setNewFish("");

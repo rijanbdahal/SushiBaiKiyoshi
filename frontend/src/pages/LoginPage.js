@@ -14,10 +14,15 @@ const LoginPage = () => {
     const authenticateLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:5000/loginPage/authenticateUser", {
+            // Use port 5001 as specified in your .env file
+            console.log("Attempting login with:", { userId, password });
+
+            const response = await axios.post("http://localhost:5001/loginPage/authenticateUser", {
                 userId: userId,
                 password: password,
             });
+
+            console.log("Login response:", response.data);
 
             const { token, user } = response.data;
             if (token && user) {
@@ -25,8 +30,20 @@ const LoginPage = () => {
                 navigate("/dashboard");
             }
         } catch (err) {
-            console.log(err);
-            setError("Problem Logging In");
+            console.error("Login error:", err);
+
+            // More detailed error message
+            if (err.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                setError(`Login failed: ${err.response.data.message || err.response.statusText}`);
+            } else if (err.request) {
+                // The request was made but no response was received
+                setError("No response from server. Please check your connection.");
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                setError(`Error: ${err.message}`);
+            }
         }
     };
 
@@ -50,10 +67,9 @@ const LoginPage = () => {
                 />
                 <button type="submit">Login</button>
 
-                {error && <p>{error}</p>}
+                {error && <p className="error-message">{error}</p>}
                 <a href="/register" style={{color:"black"}}>Need To Register?</a>
             </form>
-
         </div>
     );
 };

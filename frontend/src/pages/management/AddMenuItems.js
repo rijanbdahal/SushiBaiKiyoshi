@@ -21,7 +21,7 @@ const MenuItems = () => {
 
     const fetchInventory = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/menuitems/inventory');
+            const response = await axios.get('http://localhost:5001/menuitems/inventory');
             setInventoryItems(response.data);
         } catch (error) {
             console.error('Error fetching inventory:', error);
@@ -30,7 +30,7 @@ const MenuItems = () => {
 
     const fetchMenuItems = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/menuitems');
+            const response = await axios.get('http://localhost:5001/menuitems');
             setMenuItems(response.data);
         } catch (error) {
             console.error('Error fetching menu items:', error);
@@ -42,7 +42,7 @@ const MenuItems = () => {
 
         try {
             if (editingItem) {
-                await axios.put(`http://localhost:5000/menuitems/${editingItem.menu_item_id}`, {
+                await axios.put(`http://localhost:5001/menuitems/${editingItem.menu_item_id}`, {
                     inventory_id: inventoryId,
                     menu_item_name: menuItemName,
                     description,
@@ -51,7 +51,7 @@ const MenuItems = () => {
                 });
                 setMessage('Menu item updated successfully!');
             } else {
-                const response = await axios.post('http://localhost:5000/menuitems', {
+                const response = await axios.post('http://localhost:5001/menuitems', {
                     inventory_id: inventoryId,
                     menu_item_name: menuItemName,
                     description,

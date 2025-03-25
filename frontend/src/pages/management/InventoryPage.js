@@ -26,7 +26,7 @@ const InventoryPage = () => {
 
     const fetchInventory = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/inventory");
+            const response = await axios.get("http://localhost:5001/inventory");
             setInventory(response.data);
         } catch (error) {
             console.error("Error fetching inventory:", error);
@@ -36,7 +36,7 @@ const InventoryPage = () => {
     // Handle adding new item
     const handleAddItem = async () => {
         try {
-            await axios.post("http://localhost:5000/inventory", newItem);
+            await axios.post("http://localhost:5001/inventory", newItem);
             setNewItem({ item_name: "", no_in_stock: 0 });
             fetchInventory(); // Refresh list
         } catch (error) {
@@ -47,7 +47,7 @@ const InventoryPage = () => {
     // Handle editing an item
     const handleEditItem = async () => {
         try {
-            await axios.put(`http://localhost:5000/inventory/${editingItem.inventory_id}`, editingItem);
+            await axios.put(`http://localhost:5001/inventory/${editingItem.inventory_id}`, editingItem);
             setEditingItem(null);
             fetchInventory(); // Refresh list
         } catch (error) {
@@ -58,7 +58,7 @@ const InventoryPage = () => {
     // Handle deleting an item
     const handleDeleteItem = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/inventory/${id}`);
+            await axios.delete(`http://localhost:5001/inventory/${id}`);
             fetchInventory(); // Refresh list
         } catch (error) {
             console.error("Error deleting item:", error);

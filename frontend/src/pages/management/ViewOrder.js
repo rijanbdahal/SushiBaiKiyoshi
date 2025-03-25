@@ -14,7 +14,7 @@ const ManageOrdersPage = () => {
         const fetchOrders = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:5000/handleorder/getAllOrders');
+                const response = await axios.get('http://localhost:5001/handleorder/getAllOrders');
                 setOrders(response.data);
             } catch (error) {
                 console.error('Error fetching orders:', error);
@@ -31,7 +31,7 @@ const ManageOrdersPage = () => {
         if (window.confirm('Are you sure you want to delete this order?')) {
             setLoading(true);
             try {
-                const response = await axios.delete(`http://localhost:5000/handleorder/deleteOrder/${orderId}`);
+                const response = await axios.delete(`http://localhost:5001/handleorder/deleteOrder/${orderId}`);
                 alert(response.data.message);
                 // Refresh the orders list
                 setOrders(orders.filter(order => order.order_id !== orderId));

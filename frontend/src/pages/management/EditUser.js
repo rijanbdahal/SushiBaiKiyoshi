@@ -21,7 +21,7 @@ const ManageUsersPage = () => {
         const fetchUsers = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:5000/users/getUsers');
+                const response = await axios.get('http://localhost:5001/users/getUsers');
                 setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);
@@ -39,7 +39,7 @@ const ManageUsersPage = () => {
         setLoading(true);
 
         try {
-            const response = await axios.put(`http://localhost:5000/users/editUser/${editUser.user_id}`, editUser);
+            const response = await axios.put(`http://localhost:5001/users/editUser/${editUser.user_id}`, editUser);
             alert(response.data.message);
             setUsers(users.map(user => (user.user_id === editUser.user_id ? editUser : user)));
             setEditUser({
@@ -64,7 +64,7 @@ const ManageUsersPage = () => {
             setLoading(true);
 
             try {
-                const response = await axios.delete(`http://localhost:5000/users/deleteUser/${user_id}`);
+                const response = await axios.delete(`http://localhost:5001/users/deleteUser/${user_id}`);
                 alert(response.data.message);
                 setUsers(users.filter(user => user.user_id !== user_id));
             } catch (error) {

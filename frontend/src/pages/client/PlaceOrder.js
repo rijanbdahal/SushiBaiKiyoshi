@@ -15,7 +15,7 @@ const OrderPage = () => {
 
     // Fetch menu items when the component mounts
     useEffect(() => {
-        axios.get('http://localhost:5000/menuitems')
+        axios.get('http://localhost:5001/menuitems')
             .then((response) => {
                 setMenuItems(response.data);
             })
@@ -25,7 +25,7 @@ const OrderPage = () => {
     // Fetch user's orders based on user_id
     useEffect(() => {
         if (user && user.user_id) {
-            axios.get(`http://localhost:5000/handleorder/getItems/${user.user_id}`)
+            axios.get(`http://localhost:5001/handleorder/getItems/${user.user_id}`)
                 .then((response) => setOrders(response.data))
                 .catch((error) => console.error('Error fetching orders:', error));
         }
@@ -57,7 +57,7 @@ const OrderPage = () => {
 
         setLoading(true);
         try {
-            const response = await axios.post('http://localhost:5000/handleorder', {
+            const response = await axios.post('http://localhost:5001/handleorder', {
                 user_id: user.user_id,
                 order_date: orderDate,
                 items: orderItems,
