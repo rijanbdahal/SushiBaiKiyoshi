@@ -23,7 +23,7 @@ CREATE TABLE users (
     user_type VARCHAR(2),
     address_id INT,
     FOREIGN KEY (address_id) REFERENCES full_address(address_id),
-    passowrd VARCHAR(255)
+    password VARCHAR(255)
 );
 
 CREATE TABLE customers (
@@ -82,6 +82,13 @@ CREATE TABLE fish_market (
     FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id),
     FOREIGN KEY (postal_code) REFERENCES full_address(postal_code)
 );
+CREATE TABLE cards (
+   payment_type_id INT AUTO_INCREMENT PRIMARY KEY,
+   card_number VARCHAR(16),
+   card_holder_name VARCHAR(40),
+   postal_code VARCHAR(6),
+   FOREIGN KEY (postal_code) REFERENCES full_address(postal_code)
+);
 
 CREATE TABLE payment (
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -94,13 +101,7 @@ CREATE TABLE payment (
     FOREIGN KEY (payment_type_id) REFERENCES cards(payment_type_id)
 );
 
-CREATE TABLE cards (
-    payment_type_id INT AUTO_INCREMENT PRIMARY KEY,
-    card_number VARCHAR(16),
-    card_holder_name VARCHAR(40),
-    postal_code VARCHAR(6),
-    FOREIGN KEY (postal_code) REFERENCES full_address(postal_code)
-);
+
 
 CREATE TABLE analytics (
     analytics_id INT AUTO_INCREMENT PRIMARY KEY,

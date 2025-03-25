@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-fake-data": "node generate_fake_data.js",
+    "import-fake-data": "node import_fake_data.js"
   },
   "keywords": [],
   "author": "",
