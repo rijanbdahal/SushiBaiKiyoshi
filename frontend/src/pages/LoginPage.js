@@ -6,7 +6,7 @@ import "../css/css.css";
 
 const LoginPage = () => {
     const { login } = useContext(AuthContext);
-    const [userId, setUserId] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -15,10 +15,10 @@ const LoginPage = () => {
         e.preventDefault();
         try {
             // Use port 5001 as specified in your .env file
-            console.log("Attempting login with:", { userId, password });
+            console.log("Attempting login with:", { email, password });
 
             const response = await axios.post("http://localhost:5001/loginPage/authenticateUser", {
-                userId: userId,
+                email: email,
                 password: password,
             });
 
@@ -51,11 +51,11 @@ const LoginPage = () => {
         <div className="login-container">
             <form className="login-form" onSubmit={authenticateLogin}>
                 <h2>Login</h2>
-                <label>User ID:</label>
+                <label>Email:</label>
                 <input
                     type="text"
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                 />
                 <label>Password:</label>

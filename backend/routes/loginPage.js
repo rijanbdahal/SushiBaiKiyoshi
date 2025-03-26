@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../dbconnection');
 
 const router = express.Router();
-const SECRET_KEY = "egwfdnkln1234nkwenafdb3qih4qwjdsandaf";
+const SECRET_KEY = process.env.SECRET_KEY;
 
 router.post("/authenticateUser", async (req, res) => {
     const { email, password } = req.body;
@@ -27,14 +27,14 @@ router.post("/authenticateUser", async (req, res) => {
 
         const user = results[0];
 
-        // Compare hashed password
+
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
-        // Create JWT token
+
         const token = jwt.sign(
             { userId: user.user_id, firstName: user.first_name, email: user.email_address },
             SECRET_KEY,

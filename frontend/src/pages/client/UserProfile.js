@@ -56,7 +56,7 @@ const ProfilePage = () => {
         try {
             const response = await axios.put(
                 'http://localhost:5001/profile',
-                updatedData,
+                updatedUser,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
