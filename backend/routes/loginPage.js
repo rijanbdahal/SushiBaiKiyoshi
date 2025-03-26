@@ -1,25 +1,25 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken'); // Import JWT
+const jwt = require('jsonwebtoken');
 const db = require('../dbconnection');
 
 const router = express.Router();
 const SECRET_KEY = "egwfdnkln1234nkwenafdb3qih4qwjdsandaf";
 
-router.post("/authenticateUser",async (req, res) => {
-    const { userId, password } = req.body;
+router.post("/authenticateUser", async (req, res) => {
+    const { email, password } = req.body;
 
-    if (!userId || !password) {
-        return res.status(400).json({ message: "Missing userId or password" });
+    if (!email || !password) {
+        return res.status(400).json({ message: "Missing email or password" });
     }
 
     console.log("Checking user credentials...");
 
-    const query = "SELECT * FROM users WHERE user_id = ?";
+    const query = "SELECT * FROM users WHERE email_address = ?";
 
     try {
         // Using the promise-based query with mysql2
-        const [results] = await db.query(query, [userId]);
+        const [results] = await db.query(query, [email]);
 
         if (results.length === 0) {
             return res.status(401).json({ message: "User not found" });
@@ -48,7 +48,6 @@ router.post("/authenticateUser",async (req, res) => {
         console.error("Database query error:", err);
         return res.status(500).json({ message: "Internal server error" });
     }
-
 });
 
 module.exports = router;
