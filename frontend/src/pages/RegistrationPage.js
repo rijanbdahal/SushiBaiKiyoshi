@@ -53,8 +53,8 @@ const RegistrationPage = () => {
     };
 
     return (
-        <div className="registration-container">
-            <form className="registration-form" onSubmit={handleSubmit}>
+        <div className="login-container">
+            <form className="login-form" onSubmit={handleSubmit}>
                 <h2>Register</h2>
                 {message && <p className="message">{message}</p>}
                 {error && <p className="error">{error}</p>}
