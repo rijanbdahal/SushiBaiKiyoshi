@@ -97,7 +97,27 @@ router.get('/getAllOrders', async (req, res) => {
     }
 });
 
-// Delete an order by order_id
+router.put('/completeOrder/:orderId',async (req, res) => {
+    const {orderId} = req.params;
+    const status = "Completed"
+    try{
+        await db.query('UPDATE orders SET status = ? WHERE order_id = ?', [status, orderId]);
+    }catch (error){
+        console.error(error);
+        res.status(500).json({ error: 'Order Completion Error' });
+    }
+});
+router.put('/processOrder/:orderId',async (req, res) => {
+    const {orderId} = req.params;
+    const status = "Processing"
+    try{
+        await db.query('UPDATE orders SET status = ? WHERE order_id = ?', [status, orderId]);
+    }catch (error){
+        console.error(error);
+        res.status(500).json({ error: 'Order Completion Error' });
+    }
+});
+
 router.delete('/deleteOrder/:order_id', async (req, res) => {
     const { order_id } = req.params;
 
@@ -105,7 +125,7 @@ router.delete('/deleteOrder/:order_id', async (req, res) => {
         // Delete related order details first
         await db.query('DELETE FROM order_details WHERE order_id = ?', [order_id]);
 
-        // Then delete the order itself
+
         await db.query('DELETE FROM orders WHERE order_id = ?', [order_id]);
 
         res.status(200).json({ message: 'Order deleted successfully' });

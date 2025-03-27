@@ -42,6 +42,15 @@ const App = () => {
                     />
                 </div>
                 <div className="form-section">
+                    <label>Postal Code</label>
+                    <input
+                        type="text"
+                        value={postalCode}
+                        onChange={(e) => setPostalCode(e.target.value)}
+                        className="form-input"
+                    />
+                </div>
+                <div className="form-section">
                     <label>Country</label>
                     <input
                         type="text"

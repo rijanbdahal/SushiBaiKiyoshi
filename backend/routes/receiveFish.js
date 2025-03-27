@@ -12,6 +12,17 @@ router.get("/getInventory", async (req, res) => {
     }
 });
 
+router.get("/getPostalCode", async (req, res) => {
+    try {
+        const [results] = await db.query("SELECT * FROM fish_market");
+        res.json(results);
+    } catch (err) {
+        console.error("Error fetching inventory:", err);
+        res.status(500).json({ error: "Database error" });
+    }
+});
+
+
 // Receive fish and update inventory
 router.post("/", async (req, res) => {
     const { item_name, quantity, market_name, fish_price, postal_code } = req.body;

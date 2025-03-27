@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../css/css.css";
-import Header from "../includes/header"; // Add your custom CSS file
+import Header from "../includes/header";
 
 const ReceiveFish = () => {
     const [inventory, setInventory] = useState([]);
@@ -11,9 +11,20 @@ const ReceiveFish = () => {
     const [quantity, setQuantity] = useState("");
     const [marketName, setMarketName] = useState("");
     const [fishPrice, setFishPrice] = useState("");
+    const [postalCodes, setPostalCodes] = useState([]);
     const [postalCode, setPostalCode] = useState("");
 
     useEffect(() => {
+        const fetchPostalCodes = async () => {
+            try {
+                const response = await axios.get("http://localhost:5001/receivefish/getPostalCode");
+                setPostalCodes(response.data);
+                console.log(response.data);
+            } catch (err) {
+                console.log("Error fetching postal codes", err);
+            }
+        };
+        fetchPostalCodes();
         fetchInventory();
         fetchReceivedFish();
     }, []);
@@ -38,19 +49,10 @@ const ReceiveFish = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!selectedFish && !newFish) {
-            alert("Please select or enter a fish name.");
+        if (!selectedFish && !newFish || !quantity || isNaN(quantity) || quantity <= 0 || !marketName || !fishPrice || !postalCode) {
+            alert("Please fill in all required fields correctly.");
             return;
         }
-        if (!quantity || isNaN(quantity) || quantity <= 0) {
-            alert("Please enter a valid quantity.");
-            return;
-        }
-        if (!marketName || !fishPrice || !postalCode) {
-            alert("Please enter all market details.");
-            return;
-        }
-
         const payload = {
             item_name: selectedFish || newFish,
             quantity: parseInt(quantity),
@@ -58,7 +60,6 @@ const ReceiveFish = () => {
             fish_price: parseFloat(fishPrice),
             postal_code: postalCode
         };
-
         try {
             await axios.post("http://localhost:5001/receivefish", payload);
             alert("Inventory updated successfully.");
@@ -68,7 +69,7 @@ const ReceiveFish = () => {
             setMarketName("");
             setFishPrice("");
             setPostalCode("");
-            fetchReceivedFish(); // Refresh received fish list
+            fetchReceivedFish();
         } catch (error) {
             console.error("Error updating inventory:", error);
             alert("Failed to update inventory.");
@@ -85,41 +86,37 @@ const ReceiveFish = () => {
                     <select value={selectedFish} onChange={(e) => { setSelectedFish(e.target.value); setNewFish(""); }} className="input-field">
                         <option value="">-- Choose Existing Fish --</option>
                         {inventory.map((fish) => (
-                            <option key={fish.inventory_id} value={fish.item_name}>
-                                {fish.item_name}
-                            </option>
+                            <option key={fish.inventory_id} value={fish.item_name}>{fish.item_name}</option>
                         ))}
                     </select>
                 </div>
-
                 <div className="form-group">
                     <label>Or Enter New Fish Name:</label>
                     <input type="text" value={newFish} onChange={(e) => { setNewFish(e.target.value); setSelectedFish(""); }} placeholder="Enter new fish name" className="input-field" />
                 </div>
-
                 <div className="form-group">
                     <label>Quantity Received:</label>
-                    <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="Enter quantity" className="input-field" />
+                    <input type="number" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} placeholder="Enter quantity" className="input-field" />
                 </div>
-
                 <div className="form-group">
                     <label>Market Name:</label>
                     <input type="text" value={marketName} onChange={(e) => setMarketName(e.target.value)} placeholder="Enter market name" className="input-field" />
                 </div>
-
                 <div className="form-group">
                     <label>Fish Price:</label>
-                    <input type="number" step="0.01" value={fishPrice} onChange={(e) => setFishPrice(e.target.value)} placeholder="Enter fish price" className="input-field" />
+                    <input type="number" step="0.01" value={fishPrice} onChange={(e) => setFishPrice(Number(e.target.value))} placeholder="Enter fish price" className="input-field" />
                 </div>
-
                 <div className="form-group">
                     <label>Postal Code:</label>
-                    <input type="text" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} placeholder="Enter postal code" className="input-field" />
+                    <select value={postalCode} onChange={(e)=>setPostalCode(e.target.value)} className="input-field">
+                        <option value="">-- Choose Existing Postal Address --</option>
+                        {postalCodes.map((data, index) => (
+                            <option key={index} value={data.postal_code}>{data.postal_code}</option>
+                        ))}
+                    </select>
                 </div>
-
                 <button type="submit" className="submit-button">Submit</button>
             </form>
-
             <h2>Received Fish Entries</h2>
             <table className="received-fish-table">
                 <thead>
@@ -134,7 +131,7 @@ const ReceiveFish = () => {
                 </thead>
                 <tbody>
                 {receivedFish.map((entry) => (
-                    <tr key={entry.market_id}>
+                    <tr key={`${entry.market_id}-${entry.item_name}`}>
                         <td>{entry.market_id}</td>
                         <td>{entry.item_name}</td>
                         <td>{entry.market_name}</td>

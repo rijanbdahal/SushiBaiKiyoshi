@@ -54,18 +54,18 @@ INSERT INTO inventory (item_name, no_in_stock) VALUES
 -- If your schema uses 'passowrd' (with misspelling), change the column name here
 INSERT INTO users (first_name, last_name, phone_number, email_address, user_type, address_id, password) VALUES
 -- Admin Users
-    ('John', 'Smith', '416-555-0101', 'john.smith@email.com', 'A', 1, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
-    ('Jane', 'Doe', '416-555-0102', 'jane.doe@email.com', 'A', 2, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
+    ('John', 'Smith', '416-555-0101', 'john.smith@email.com', 'A', 1, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
+    ('Jane', 'Doe', '416-555-0102', 'jane.doe@email.com', 'A', 2, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
 
 -- Regular Users
-    ('Michael', 'Brown', '604-555-0103', 'michael.brown@email.com', 'U', 3, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
-    ('Emily', 'Johnson', '514-555-0104', 'emily.johnson@email.com', 'U', 4, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
-    ('David', 'Wilson', '403-555-0105', 'david.wilson@email.com', 'U', 5, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
-    ('Sophia', 'Taylor', '613-555-0106', 'sophia.taylor@email.com', 'U', 6, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
-    ('James', 'Anderson', '902-555-0107', 'james.anderson@email.com', 'U', 7, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
-    ('Olivia', 'Thomas', '204-555-0108', 'olivia.thomas@email.com', 'U', 8, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
-    ('William', 'Jackson', '306-555-0109', 'william.jackson@email.com', 'U', 9, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe'),
-    ('Ava', 'White', '506-555-0110', 'ava.white@email.com', 'U', 10, '$2b$10$Yh1nxMcCXjy2zIIMqQecDeDxTuZT6Ro7mXE7.OcO.f1jBxw2pRiGe');
+    ('Michael', 'Brown', '604-555-0103', 'michael.brown@email.com', 'U', 3, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
+    ('Emily', 'Johnson', '514-555-0104', 'emily.johnson@email.com', 'U', 4, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
+    ('David', 'Wilson', '403-555-0105', 'david.wilson@email.com', 'U', 5, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
+    ('Sophia', 'Taylor', '613-555-0106', 'sophia.taylor@email.com', 'U', 6, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
+    ('James', 'Anderson', '902-555-0107', 'james.anderson@email.com', 'U', 7, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
+    ('Olivia', 'Thomas', '204-555-0108', 'olivia.thomas@email.com', 'U', 8, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
+    ('William', 'Jackson', '306-555-0109', 'william.jackson@email.com', 'U', 9, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm'),
+    ('Ava', 'White', '506-555-0110', 'ava.white@email.com', 'U', 10, '$2b$10$48tP/f7n66xNqW9V483hfudWuKWO8SAJwrb9YNiAjihrIW/A1WfJm');
 
 -- Insert Customers
 INSERT INTO customers (user_id) VALUES
@@ -137,13 +137,13 @@ INSERT INTO fish_market (inventory_id, market_name, inbound_quantity, fish_price
 -- Insert Orders (past month)
 -- Note: The total values should be calculated based on the actual items
 INSERT INTO orders (customer_id, order_date, total, status) VALUES
-    (1, '2025-02-25', 43.98, 'Completed'),  -- Salmon + Shrimp Pasta
+    (1, '2025-02-25', 43.98, 'Processing'),  -- Salmon + Shrimp Pasta
     (2, '2025-02-26', 35.98, 'Completed'),  -- Fish & Chips + Coconut Shrimp
     (3, '2025-02-28', 19.99, 'Completed'),  -- Tilapia
     (4, '2025-03-01', 34.98, 'Completed'),  -- Mussels + Clams
     (5, '2025-03-03', 39.99, 'Completed'),  -- Lobster
     (6, '2025-03-05', 38.98, 'Completed'),  -- Oysters + Poke Bowl
-    (7, '2025-03-07', 60.98, 'Completed'),  -- Shrimp Pasta + Lobster
+    (7, '2025-03-07', 60.98, 'Pending'),  -- Shrimp Pasta + Lobster
     (8, '2025-03-08', 56.98, 'Completed'),  -- Scallops + Halibut
     (1, '2025-03-10', 51.98, 'Completed'),  -- Salmon + Scallops
     (2, '2025-03-12', 43.98, 'Completed'),  -- Sea Bass + Coconut Shrimp

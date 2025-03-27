@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import "../../css/css.css"
 import Header from "../includes/header";
+import {AuthContext} from "../../AuthProvider";
 
 const ManageCardsPage = () => {
     const [cards, setCards] = useState([]);
+    const { user} = useContext(AuthContext);
+
+    const [userName, setUserName] = useState("");
+
+
     const [newCard, setNewCard] = useState({
         card_number: '',
         card_holder_name: '',
@@ -18,12 +24,17 @@ const ManageCardsPage = () => {
     });
     const [loading, setLoading] = useState(false);
 
-    // Fetch all cards
     useEffect(() => {
+        setUserName(user?.first_name+" "+user?.last_name);
+        console.log(userName);
+    }, [user]);
+
+    useEffect(() => {
+
         const fetchCards = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:5001/cards/getCards');
+                const response = await axios.get(`http://localhost:5001/cards/getCards/${userName}`);
                 setCards(response.data);
             } catch (error) {
                 console.error('Error fetching cards:', error);
@@ -33,7 +44,7 @@ const ManageCardsPage = () => {
         };
 
         fetchCards();
-    }, []);
+    }, [userName]);
 
     // Handle add card
     const handleAddCard = async (e) => {
