@@ -63,10 +63,12 @@ router.delete('/deleteCard/:payment_type_id', async (req, res) => {
     }
 });
 
-// Fetch all cards
-router.get('/getCards', async (req, res) => {
+
+router.get('/getCards/:userName', async (req, res) => {
     try {
-        const [cards] = await db.query(`SELECT * FROM cards`);
+        const {userName} = req.params;
+        console.log(userName);
+        const [cards] = await db.query(`SELECT * FROM cards where card_holder_name = ?`, [userName]);
         res.status(200).json(cards);
     } catch (err) {
         console.error('Error fetching cards:', err);
