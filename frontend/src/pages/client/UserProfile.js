@@ -54,19 +54,51 @@ const ProfilePage = () => {
 
     const handleSave = async () => {
         try {
+            // Prepare address data to match backend expectations
+            const profileData = {
+                first_name: updatedUser.first_name,
+                last_name: updatedUser.last_name,
+                phone_number: updatedUser.phone_number,
+                email_address: updatedUser.email_address,
+                address: {
+                    street_address: updatedUser.street_address,
+                    city: updatedUser.city,
+                    province: updatedUser.province,
+                    country: updatedUser.country,
+                    postal_code: updatedUser.postal_code
+                }
+            };
+
             const response = await axios.put(
                 'http://localhost:5000/profile',
-                updatedUser,
+                profileData,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 }
             );
-            setUserProfile(response.data);
+            
+            // Refresh user profile data after successful update
+            if (response.data) {
+                const decodedToken = jwtDecode(token);
+                const userId = decodedToken.userId;
+                
+                const profileResponse = await axios.get(`http://localhost:5000/profile/${userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                
+                setUserProfile(profileResponse.data);
+                setUpdatedUser(profileResponse.data);
+            }
+            
             setIsEditing(false);
+            alert("Profile updated successfully!");
         } catch (error) {
             console.error('Error updating profile:', error);
+            alert("Error updating profile. Please try again.");
         }
     };
 
@@ -77,40 +109,91 @@ const ProfilePage = () => {
     return (
         <div className="profile-page">
             <Header />
-            <h1>Profile Page</h1>
-            <div className="profile-info">
-                {[
-                    { label: "First Name", key: "first_name" },
-                    { label: "Last Name", key: "last_name" },
-                    { label: "Email Address", key: "email_address" },
-                    { label: "Phone Number", key: "phone_number" },
-                    { label: "Street Address", key: "street_address" },
-                    { label: "City", key: "city" },
-                    { label: "Province", key: "province" },
-                    { label: "Country", key: "country" },
-                    { label: "Postal Code", key: "postal_code" },
-                ].map(({ label, key }) => (
-                    <div key={key}>
-                        <label>{label}:</label>
+            <h1 className="page-title">My Profile</h1>
+            <div className="container">
+                <div className="profile-card">
+                    <div className="profile-header">
+                        <div className="profile-avatar">
+                            {userProfile?.first_name?.[0]}{userProfile?.last_name?.[0]}
+                        </div>
+                        <div className="profile-title">
+                            <h2 className="profile-name">{userProfile?.first_name} {userProfile?.last_name}</h2>
+                            <p className="profile-role">{userProfile?.role || "Customer"}</p>
+                        </div>
+                    </div>
+
+                    <div className="profile-actions">
                         {isEditing ? (
-                            <input
-                                type="text"
-                                name={key}
-                                value={updatedUser?.[key] || ""}
-                                onChange={handleChange}
-                            />
+                            <button className="save-button" onClick={handleSave}>
+                                Save Changes
+                            </button>
                         ) : (
-                            <p>{userProfile?.[key]}</p>
+                            <button className="edit-profile-button" onClick={() => setIsEditing(true)}>
+                                Edit Profile
+                            </button>
                         )}
                     </div>
-                ))}
 
-                <div>
-                    {isEditing ? (
-                        <button onClick={handleSave}>Save</button>
-                    ) : (
-                        <button onClick={() => setIsEditing(true)}>Edit Profile</button>
-                    )}
+                    <div className="profile-sections">
+                        <div className="profile-section">
+                            <h3 className="section-title">Personal Information</h3>
+                            <div className="profile-fields">
+                                {[
+                                    { label: "First Name", key: "first_name" },
+                                    { label: "Last Name", key: "last_name" },
+                                    { label: "Email Address", key: "email_address" },
+                                    { label: "Phone Number", key: "phone_number" },
+                                ].map(({ label, key }) => (
+                                    <div key={key} className="profile-field">
+                                        <div className="field-content">
+                                            <label className="field-label">{label}</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    className="form-input"
+                                                    name={key}
+                                                    value={updatedUser?.[key] || ""}
+                                                    onChange={handleChange}
+                                                />
+                                            ) : (
+                                                <p className="field-value">{userProfile?.[key] || "Not provided"}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="profile-section">
+                            <h3 className="section-title">Address Information</h3>
+                            <div className="profile-fields">
+                                {[
+                                    { label: "Street Address", key: "street_address" },
+                                    { label: "City", key: "city" },
+                                    { label: "Province", key: "province" },
+                                    { label: "Country", key: "country" },
+                                    { label: "Postal Code", key: "postal_code" },
+                                ].map(({ label, key }) => (
+                                    <div key={key} className="profile-field">
+                                        <div className="field-content">
+                                            <label className="field-label">{label}</label>
+                                            {isEditing ? (
+                                                <input
+                                                    type="text"
+                                                    className="form-input"
+                                                    name={key}
+                                                    value={updatedUser?.[key] || ""}
+                                                    onChange={handleChange}
+                                                />
+                                            ) : (
+                                                <p className="field-value">{userProfile?.[key] || "Not provided"}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

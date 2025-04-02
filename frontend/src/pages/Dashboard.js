@@ -1,34 +1,35 @@
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../AuthProvider";
 import { useNavigate } from "react-router-dom";
+import CustomerDashboard from "./client/CustomerDashboard";
+import AdminDashboard from "./management/AdminDashboard";
 import Header from "./includes/header";
-import '../css/css.css'
+import '../css/css.css';
 
 const Dashboard = () => {
-    const { token, user, logout } = useContext(AuthContext);
+    const { token, user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!token) {
             navigate("/login");
+            return;
         }
     }, [token, navigate]);
 
-    return (
-        <div className="dashboard-container">
-            <Header />
-            <h1>Dashboard</h1>
-            {token ? (
-                <div>
-                    <h2>Hi, welcome to our website, {user?.first_name}!</h2>
-                    <button onClick={logout}>Logout</button>
-
+    if (!user) {
+        return (
+            <div className="dashboard-container">
+                <Header />
+                <div className="container">
+                    <div className="loading-spinner">Loading dashboard...</div>
                 </div>
-            ) : (
-                <p className="unauthenticated-message">You are not logged in.</p>
-            )}
-        </div>
-    );
+            </div>
+        );
+    }
+
+    // Render different dashboard based on user type
+    return user.user_type === "A" ? <AdminDashboard /> : <CustomerDashboard />;
 };
 
 export default Dashboard;

@@ -139,116 +139,129 @@ const OrderPage = () => {
         <div className="order-page-container">
             <Header/>
             <h1 className="page-title">Place Your Order</h1>
-            <form onSubmit={handleSubmit} className="order-form">
-                <div className="form-section">
-                    <label>Order Date:</label>
-                    <input
-                        type="date"
-                        className="form-input"
-                        value={orderDate}
-                        onChange={(e) => setOrderDate(e.target.value)}
-                    />
-                </div>
+            <div className="container">
+                <form onSubmit={handleSubmit} className="order-form">
+                    <div className="form-section">
+                        <label>Order Date:</label>
+                        <input
+                            type="date"
+                            className="form-input"
+                            value={orderDate}
+                            onChange={(e) => setOrderDate(e.target.value)}
+                        />
+                    </div>
 
-                <div className="form-section">
-                    <h2>Menu Items</h2>
-                    {menuItems.map((item) => {
-                        const discount = userDiscounts.find(d => 
-                            d.menu_item_id === item.menu_item_id && d.discount_eligible
-                        );
-                        
-                        return (
-                            <div key={item.menu_item_id} className="menu-item">
-                                <div className="menu-item-details">
-                                    <label className="menu-item-label">
-                                        {item.menu_item_name}
-                                        {discount ? (
-                                            <span className="price-display">
-                                                <span className="original-price">${item.price.toFixed(2)}</span>
-                                                <span className="discounted-price">${(item.price * 0.9).toFixed(2)}</span>
-                                                <span className="discount-badge">10% OFF</span>
-                                            </span>
-                                        ) : (
-                                            <span className="price-display">
-                                                ${item.price.toFixed(2)}
-                                            </span>
-                                        )}
-                                    </label>
-                                    {discount && (
-                                        <div className="discount-info">
-                                            You qualify for a loyalty discount on this item!
-                                        </div>
-                                    )}
-                                </div>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    placeholder="Quantity"
-                                    className="menu-item-input"
-                                    onChange={(e) => handleQuantityChange(item.menu_item_id, parseInt(e.target.value) || 0)}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
-                
-                {orderItems.length > 0 && (
-                    <div className="order-summary">
-                        <h3>Order Summary</h3>
-                        <div className="order-items-list">
-                            {orderItems.map((item, index) => {
-                                const menuItem = menuItems.find(mi => mi.menu_item_id === item.menu_item_id);
+                    <div className="form-section">
+                        <h2>Menu Items</h2>
+                        <div className="menu-items-grid">
+                            {menuItems.map((item) => {
+                                const discount = userDiscounts.find(d => 
+                                    d.menu_item_id === item.menu_item_id && d.discount_eligible
+                                );
+                                
                                 return (
-                                    <div key={index} className="summary-item">
-                                        <span>{menuItem?.menu_item_name} x {item.quantity}</span>
-                                        {item.has_discount ? (
-                                            <span className="price-display">
-                                                <span className="original-price">${(item.original_price * item.quantity).toFixed(2)}</span>
-                                                <span className="discounted-price">${(item.price * item.quantity).toFixed(2)}</span>
-                                            </span>
-                                        ) : (
-                                            <span>${(item.price * item.quantity).toFixed(2)}</span>
-                                        )}
+                                    <div key={item.menu_item_id} className="menu-item-card">
+                                        <div className="menu-item-details">
+                                            <h3 className="menu-item-name">{item.menu_item_name}</h3>
+                                            {discount ? (
+                                                <div className="price-display">
+                                                    <span className="original-price">${item.price.toFixed(2)}</span>
+                                                    <span className="discounted-price">${(item.price * 0.9).toFixed(2)}</span>
+                                                    <span className="discount-badge">10% OFF</span>
+                                                </div>
+                                            ) : (
+                                                <div className="price-display">
+                                                    <span className="regular-price">${item.price.toFixed(2)}</span>
+                                                </div>
+                                            )}
+                                            {discount && (
+                                                <div className="discount-info">
+                                                    You qualify for a loyalty discount!
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="quantity-control">
+                                            <label>Quantity:</label>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                placeholder="0"
+                                                className="menu-item-input"
+                                                onChange={(e) => handleQuantityChange(item.menu_item_id, parseInt(e.target.value) || 0)}
+                                            />
+                                        </div>
                                     </div>
                                 );
                             })}
                         </div>
-                        
-                        <div className="order-totals">
-                            {originalTotal !== orderTotal && (
-                                <div className="original-total">Original Total: ${originalTotal.toFixed(2)}</div>
-                            )}
-                            <div className="final-total">
-                                Total: ${orderTotal.toFixed(2)}
+                    </div>
+                    
+                    {orderItems.length > 0 && (
+                        <div className="order-summary">
+                            <h3>Order Summary</h3>
+                            <div className="order-items-list">
+                                {orderItems.map((item, index) => {
+                                    const menuItem = menuItems.find(mi => mi.menu_item_id === item.menu_item_id);
+                                    return (
+                                        <div key={index} className="summary-item">
+                                            <span className="item-name">{menuItem?.menu_item_name} <span className="item-quantity">x {item.quantity}</span></span>
+                                            {item.has_discount ? (
+                                                <span className="price-display">
+                                                    <span className="original-price">${(item.original_price * item.quantity).toFixed(2)}</span>
+                                                    <span className="discounted-price">${(item.price * item.quantity).toFixed(2)}</span>
+                                                </span>
+                                            ) : (
+                                                <span className="item-price">${(item.price * item.quantity).toFixed(2)}</span>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            
+                            <div className="order-totals">
                                 {originalTotal !== orderTotal && (
-                                    <span className="savings-badge">
-                                        You save ${(originalTotal - orderTotal).toFixed(2)}!
-                                    </span>
+                                    <div className="original-total">Original Total: ${originalTotal.toFixed(2)}</div>
                                 )}
+                                <div className="final-total">
+                                    Total: ${orderTotal.toFixed(2)}
+                                    {originalTotal !== orderTotal && (
+                                        <span className="savings-badge">
+                                            You save ${(originalTotal - orderTotal).toFixed(2)}!
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                <button type="submit" className="order-button" disabled={loading}>
-                    {loading ? "Placing Order..." : "Place Order"}
-                </button>
-            </form>
+                    <button type="submit" className="order-button" disabled={loading}>
+                        {loading ? "Placing Order..." : "Place Order"}
+                    </button>
+                </form>
 
-            <h2>Your Orders</h2>
-            {orders.length === 0 ? (
-                <p>No orders placed yet.</p>
-            ) : (
-                <ul className="order-list">
-                    {orders.map((order) => (
-                        <li key={order.order_id} className="order-item">
-                            <span className="order-item-label">
-                                Order #{order.order_id} - {order.order_date} - {order.status} - ${order.total.toFixed(2)}
-                            </span>
-                        </li>
-                    ))}
-                </ul>
-            )}
+                <div className="order-history">
+                    <h2>Your Order History</h2>
+                    {orders.length === 0 ? (
+                        <div className="no-data-message">
+                            <p>No orders placed yet.</p>
+                            <p>Your order history will appear here after you place your first order.</p>
+                        </div>
+                    ) : (
+                        <ul className="order-list">
+                            {orders.map((order) => (
+                                <li key={order.order_id} className="order-item">
+                                    <div className="order-details">
+                                        <span className="order-id">Order #{order.order_id}</span>
+                                        <span className="order-date">{order.order_date}</span>
+                                        <span className={`status-badge status-${order.status.toLowerCase()}`}>{order.status}</span>
+                                    </div>
+                                    <span className="order-total">${order.total.toFixed(2)}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };
