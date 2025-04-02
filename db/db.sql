@@ -1,10 +1,10 @@
 CREATE TABLE full_address (
     address_id INT AUTO_INCREMENT PRIMARY KEY,
     postal_code VARCHAR(6) UNIQUE,
-    country VARCHAR(10),
+    country VARCHAR(20),
     province VARCHAR(20),
     city VARCHAR(20),
-    street_address VARCHAR(40)
+    street_address VARCHAR(100)
 );
 
 CREATE TABLE inventory (
@@ -102,7 +102,6 @@ CREATE TABLE payment (
 );
 
 
-
 CREATE TABLE analytics (
     analytics_id INT AUTO_INCREMENT PRIMARY KEY,
     day_of_week VARCHAR(20),
@@ -112,6 +111,9 @@ CREATE TABLE analytics (
     discount_eligibility BOOLEAN,
     menu_item_id INT,
     customer_id INT,
+    sales_growth_rate DECIMAL(5, 2),
+    customer_retention_rate DECIMAL(5, 2),
+    peak_hours VARCHAR(20),
     FOREIGN KEY (menu_item_id) REFERENCES menu_item(menu_item_id),
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
 );
@@ -126,4 +128,86 @@ CREATE TABLE discount (
     analytics_id INT,
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
     FOREIGN KEY (analytics_id) REFERENCES analytics(analytics_id)
+);
+
+-- New tables for analytics features
+
+CREATE TABLE discount_usage (
+    usage_id INT AUTO_INCREMENT PRIMARY KEY,
+    discount_id INT,
+    order_id INT,
+    applied_amount DECIMAL(10, 2),
+    usage_date DATETIME,
+    FOREIGN KEY (discount_id) REFERENCES discount(discount_id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+
+CREATE TABLE expense_category (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(50),
+    description VARCHAR(100)
+);
+
+CREATE TABLE expense (
+    expense_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_id INT,
+    amount DECIMAL(10, 2),
+    expense_date DATE,
+    description VARCHAR(100),
+    payment_method VARCHAR(20),
+    reference_number VARCHAR(50),
+    FOREIGN KEY (category_id) REFERENCES expense_category(category_id)
+);
+
+CREATE TABLE inventory_expense (
+    inventory_expense_id INT AUTO_INCREMENT PRIMARY KEY,
+    expense_id INT,
+    inventory_id INT,
+    quantity INT,
+    unit_cost DECIMAL(10, 2),
+    FOREIGN KEY (expense_id) REFERENCES expense(expense_id),
+    FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id)
+);
+
+CREATE TABLE sales_trends (
+    trend_id INT AUTO_INCREMENT PRIMARY KEY,
+    period_type VARCHAR(20), /* daily, weekly, monthly, yearly */
+    period_start DATE,
+    period_end DATE,
+    total_sales DECIMAL(10, 2),
+    total_orders INT,
+    average_order_value DECIMAL(10, 2),
+    highest_selling_item_id INT,
+    highest_selling_item_count INT,
+    FOREIGN KEY (highest_selling_item_id) REFERENCES menu_item(menu_item_id)
+);
+
+CREATE TABLE sales_forecast (
+    forecast_id INT AUTO_INCREMENT PRIMARY KEY,
+    menu_item_id INT,
+    forecast_date DATE,
+    predicted_sales INT,
+    confidence_level DECIMAL(5, 2),
+    FOREIGN KEY (menu_item_id) REFERENCES menu_item(menu_item_id)
+);
+
+CREATE TABLE market_price_history (
+    history_id INT AUTO_INCREMENT PRIMARY KEY,
+    inventory_id INT,
+    market_id INT,
+    price_date DATE,
+    price_amount DECIMAL(10, 2),
+    FOREIGN KEY (inventory_id) REFERENCES inventory(inventory_id),
+    FOREIGN KEY (market_id) REFERENCES fish_market(market_id)
+);
+
+CREATE TABLE customer_preferences (
+    preference_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    menu_item_id INT,
+    order_count INT,
+    last_ordered DATE,
+    discount_eligible BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+    FOREIGN KEY (menu_item_id) REFERENCES menu_item(menu_item_id)
 );
