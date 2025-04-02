@@ -13,13 +13,14 @@ const ReceiveFish = () => {
     const [fishPrice, setFishPrice] = useState("");
     const [postalCodes, setPostalCodes] = useState([]);
     const [postalCode, setPostalCode] = useState("");
+    const [filteredPostalCodes, setFilteredPostalCodes] = useState([]);
 
     useEffect(() => {
         const fetchPostalCodes = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/receivefish/getPostalCode");
-                setPostalCodes(response.data);
+                const response = await axios.get("http://localhost:5001/receivefish/getPostalCode");
                 console.log(response.data);
+                setPostalCodes(response.data);
             } catch (err) {
                 console.log("Error fetching postal codes", err);
             }
@@ -31,7 +32,7 @@ const ReceiveFish = () => {
 
     const fetchInventory = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/receivefish/getInventory");
+            const response = await axios.get("http://localhost:5001/receivefish/getInventory");
             setInventory(response.data);
         } catch (error) {
             console.error("Error fetching inventory:", error);
@@ -40,11 +41,22 @@ const ReceiveFish = () => {
 
     const fetchReceivedFish = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/receivefish/getReceivedFish");
+            const response = await axios.get("http://localhost:5001/receivefish/getReceivedFish");
             setReceivedFish(response.data);
         } catch (error) {
             console.error("Error fetching received fish entries:", error);
         }
+    };
+
+    // This function is used to filter the postal codes based on selected market
+    const handleMarketChange = (e) => {
+        const selectedMarket = e.target.value;
+        setMarketName(selectedMarket);
+
+        // Filter postal codes based on the selected market
+        const filtered = postalCodes.filter((data) => data.market_name === selectedMarket);
+        setFilteredPostalCodes(filtered);
+        setPostalCode(""); // Reset postal code if market changes
     };
 
     const handleSubmit = async (e) => {
@@ -61,7 +73,7 @@ const ReceiveFish = () => {
             postal_code: postalCode
         };
         try {
-            await axios.post("http://localhost:5000/receivefish", payload);
+            await axios.post("http://localhost:5001/receivefish", payload);
             alert("Inventory updated successfully.");
             setSelectedFish("");
             setNewFish("");
@@ -78,9 +90,18 @@ const ReceiveFish = () => {
 
     return (
         <div className="receive-fish-container">
-            <Header/>
+            <Header />
             <h2>Receiving Inventory</h2>
             <form onSubmit={handleSubmit} className="receive-fish-form">
+                <div className="form-group">
+                    <label>Fish Market:</label>
+                    <select value={marketName} onChange={handleMarketChange} className="input-field">
+                        <option value="">-- Choose Existing Market --</option>
+                        {postalCodes.map((data, index) => (
+                            <option key={index} value={data.market_name}>{data.market_name}</option>
+                        ))}
+                    </select>
+                </div>
                 <div className="form-group">
                     <label>Select Fish:</label>
                     <select value={selectedFish} onChange={(e) => { setSelectedFish(e.target.value); setNewFish(""); }} className="input-field">
@@ -98,19 +119,16 @@ const ReceiveFish = () => {
                     <label>Quantity Received:</label>
                     <input type="number" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} placeholder="Enter quantity" className="input-field" />
                 </div>
-                <div className="form-group">
-                    <label>Market Name:</label>
-                    <input type="text" value={marketName} onChange={(e) => setMarketName(e.target.value)} placeholder="Enter market name" className="input-field" />
-                </div>
+
                 <div className="form-group">
                     <label>Fish Price:</label>
                     <input type="number" step="0.01" value={fishPrice} onChange={(e) => setFishPrice(Number(e.target.value))} placeholder="Enter fish price" className="input-field" />
                 </div>
                 <div className="form-group">
                     <label>Postal Code:</label>
-                    <select value={postalCode} onChange={(e)=>setPostalCode(e.target.value)} className="input-field">
-                        <option value="">-- Choose Existing Postal Address --</option>
-                        {postalCodes.map((data, index) => (
+                    <select value={postalCode} onChange={(e) => setPostalCode(e.target.value)} className="input-field">
+                        <option value="">-- Choose Postal Code --</option>
+                        {filteredPostalCodes.map((data, index) => (
                             <option key={index} value={data.postal_code}>{data.postal_code}</option>
                         ))}
                     </select>
