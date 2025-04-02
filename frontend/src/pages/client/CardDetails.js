@@ -34,7 +34,7 @@ const ManageCardsPage = () => {
         const fetchCards = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:5001/cards/getCards/${userName}`);
+                const response = await axios.get(`http://localhost:5000/cards/getCards/${userName}`);
                 setCards(response.data);
             } catch (error) {
                 console.error('Error fetching cards:', error);
@@ -52,7 +52,7 @@ const ManageCardsPage = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:5001/cards/addCard', newCard);
+            const response = await axios.post('http://localhost:5000/cards/addCard', newCard);
             alert(response.data.message);
             setCards([...cards, { ...newCard, payment_type_id: response.data.cardId }]);
             setNewCard({ card_number: '', card_holder_name: '', postal_code: '' });
@@ -70,7 +70,7 @@ const ManageCardsPage = () => {
         setLoading(true);
 
         try {
-            const response = await axios.put(`http://localhost:5001/cards/editCard/${editCard.payment_type_id}`, editCard);
+            const response = await axios.put(`http://localhost:5000/cards/editCard/${editCard.payment_type_id}`, editCard);
             alert(response.data.message);
             setCards(cards.map(card => (card.payment_type_id === editCard.payment_type_id ? editCard : card)));
             setEditCard({ payment_type_id: null, card_number: '', card_holder_name: '', postal_code: '' });
@@ -88,7 +88,7 @@ const ManageCardsPage = () => {
             setLoading(true);
 
             try {
-                const response = await axios.delete(`http://localhost:5001/cards/deleteCard/${payment_type_id}`);
+                const response = await axios.delete(`http://localhost:5000/cards/deleteCard/${payment_type_id}`);
                 alert(response.data.message);
                 setCards(cards.filter(card => card.payment_type_id !== payment_type_id));
             } catch (error) {

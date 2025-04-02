@@ -13,7 +13,7 @@ const App = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5001/supplieraddress', {
+            const response = await axios.post('http://localhost:5000/supplieraddress', {
                 postal_code: postalCode,
                 country: country,
                 province: province,

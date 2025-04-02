@@ -14,10 +14,10 @@ const LoginPage = () => {
     const authenticateLogin = async (e) => {
         e.preventDefault();
         try {
-            // Use port 5001 as specified in your .env file
+            // Use port 5000 as specified in your .env file
             console.log("Attempting login with:", { email, password });
 
-            const response = await axios.post("http://localhost:5001/loginPage/authenticateUser", {
+            const response = await axios.post("http://localhost:5000/loginPage/authenticateUser", {
                 email: email,
                 password: password,
             });

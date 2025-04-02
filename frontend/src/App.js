@@ -12,6 +12,7 @@ import ViewOrder from "./pages/management/ViewOrder";
 import CardDetails from "./pages/client/CardDetails";
 import EditUser from "./pages/management/EditUser";
 import UserProfile from "./pages/client/UserProfile";
+import ViewFastMovingProducts from "./pages/management/ViewFastMovingProducts";
 import Error from "./pages/Error";
 
 
@@ -32,6 +33,7 @@ function App() {
               <Route path="/carddetails" element={<CardDetails />} />
               <Route path="/edituser" element={<EditUser />} />
             <Route path="/viewprofile" element={<UserProfile />} />
+            <Route path="/analytics" element={<ViewFastMovingProducts />} />
 
             <Route path="/" element={<Dashboard />} />
             <Route path="/*" element={<Error />} />

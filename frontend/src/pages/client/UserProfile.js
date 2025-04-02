@@ -24,7 +24,7 @@ const ProfilePage = () => {
                 const userId = decodedToken.userId;
 
                 // Fetch the user profile from the server using the userId
-                const response = await axios.get(`http://localhost:5001/profile/${userId}`, {
+                const response = await axios.get(`http://localhost:5000/profile/${userId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -55,7 +55,7 @@ const ProfilePage = () => {
     const handleSave = async () => {
         try {
             const response = await axios.put(
-                'http://localhost:5001/profile',
+                'http://localhost:5000/profile',
                 updatedUser,
                 {
                     headers: {

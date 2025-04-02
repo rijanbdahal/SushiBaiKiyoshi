@@ -1,0 +1,22 @@
+/* No data message for empty states */
+.no-data-message {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    margin: 30px 0;
+}
+
+.no-data-message p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: #495057;
+}
+
+.no-data-message p:first-child {
+    font-weight: bold;
+    font-size: 18px;
+    color: #212529;
+}
