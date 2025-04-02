@@ -211,43 +211,6 @@ const ViewFastMovingProducts = () => {
                         )}
                     </div>
                 </div>
-
-                {/* Order Status Details */}
-                <div className="order-status-details">
-                    <h3>Order Status Details for {selectedMonthData.month}</h3>
-                    <div className="status-metrics">
-                        <div className="status-metric completed">
-                            <span className="status-label">Completed Orders</span>
-                            <span className="status-value">{completedCount}</span>
-                            <span className="status-percentage">
-                                {completedPercent}%
-                            </span>
-                        </div>
-                        <div className="status-metric processing">
-                            <span className="status-label">Processing Orders</span>
-                            <span className="status-value">{processingCount}</span>
-                            <span className="status-percentage">
-                                {processingPercent}%
-                            </span>
-                        </div>
-                        <div className="status-metric pending">
-                            <span className="status-label">Pending Orders</span>
-                            <span className="status-value">{pendingCount}</span>
-                            <span className="status-percentage">
-                                {pendingPercent}%
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Debug information */}
-                    <div className="debug-info" style={{ marginTop: '20px', padding: '10px', backgroundColor: '#f8f9fa', borderRadius: '5px' }}>
-                        <h4>Debug Information</h4>
-                        <p>Completed: {completedCount} / {totalStatusCount} = {completedPercent}%</p>
-                        <p>Processing: {processingCount} / {totalStatusCount} = {processingPercent}%</p>
-                        <p>Pending: {pendingCount} / {totalStatusCount} = {pendingPercent}%</p>
-                        <p>Sum of percentages: {parseFloat(completedPercent) + parseFloat(processingPercent) + parseFloat(pendingPercent)}%</p>
-                    </div>
-                </div>
             </div>
         );
     };

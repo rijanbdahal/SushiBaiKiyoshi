@@ -18,7 +18,7 @@ const ReceiveFish = () => {
     useEffect(() => {
         const fetchPostalCodes = async () => {
             try {
-                const response = await axios.get("http://localhost:5001/receivefish/getPostalCode");
+                const response = await axios.get("http://localhost:5000/receivefish/getPostalCode");
                 console.log(response.data);
                 setPostalCodes(response.data);
             } catch (err) {
@@ -32,7 +32,7 @@ const ReceiveFish = () => {
 
     const fetchInventory = async () => {
         try {
-            const response = await axios.get("http://localhost:5001/receivefish/getInventory");
+            const response = await axios.get("http://localhost:5000/receivefish/getInventory");
             setInventory(response.data);
         } catch (error) {
             console.error("Error fetching inventory:", error);
@@ -41,7 +41,7 @@ const ReceiveFish = () => {
 
     const fetchReceivedFish = async () => {
         try {
-            const response = await axios.get("http://localhost:5001/receivefish/getReceivedFish");
+            const response = await axios.get("http://localhost:5000/receivefish/getReceivedFish");
             setReceivedFish(response.data);
         } catch (error) {
             console.error("Error fetching received fish entries:", error);
@@ -73,7 +73,7 @@ const ReceiveFish = () => {
             postal_code: postalCode
         };
         try {
-            await axios.post("http://localhost:5001/receivefish", payload);
+            await axios.post("http://localhost:5000/receivefish", payload);
             alert("Inventory updated successfully.");
             setSelectedFish("");
             setNewFish("");
