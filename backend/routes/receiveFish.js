@@ -58,7 +58,7 @@ router.post("/", async (req, res) => {
         let inventoryId;
 
         if (results.length > 0) {
-            // Fish exists, update stock
+
             inventoryId = results[0].inventory_id;
             logger.action(ROUTE_NAME, 'Fish exists in inventory, updating stock', {
                 inventoryId,
@@ -71,7 +71,7 @@ router.post("/", async (req, res) => {
                 [quantity, item_name]
             );
         } else {
-            // Fish does not exist, insert new record
+
             logger.action(ROUTE_NAME, 'Fish not in inventory, adding new item', { item_name, quantity });
             const [insertResult] = await db.query(
                 "INSERT INTO inventory (item_name, no_in_stock) VALUES (?, ?)",
