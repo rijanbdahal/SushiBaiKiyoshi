@@ -286,5 +286,26 @@ router.get('/discounts/:user_id', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+router.get('/getOrderItems/:order_id', async (req, res) => {
+    logger.routeCalled(req, ROUTE_NAME);
+    const { order_id } = req.params;
+    logger.action(ROUTE_NAME, 'Fetching order items', { order_id });
 
+    try {
+        // Query to fetch order details with menu item information
+        const [orderItems] = await db.query(`
+            SELECT od.*, mi.menu_item_name, mi.price
+            FROM order_details od
+            JOIN menu_item mi ON od.menu_item_id = mi.menu_item_id
+            WHERE od.order_id = ?
+        `, [order_id]);
+
+        logger.action(ROUTE_NAME, 'Order items fetched successfully', { count: orderItems.length });
+        res.status(200).json(orderItems);
+    } catch (err) {
+        logger.error(ROUTE_NAME, 'Error fetching order items', err);
+        console.error('Error fetching order items:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 module.exports = router;

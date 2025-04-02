@@ -34,11 +34,11 @@ const Header = () => {
                     <img src="../../logo.png" alt="Logo" className="logo-img" />
                 </Link>
             </div>
-            
+
             <div className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 <span className="toggle-icon"></span>
             </div>
-            
+
             <nav className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
                 {/* Main Navigation - High Priority Items */}
                 <div className="nav-section primary-nav">
@@ -46,9 +46,14 @@ const Header = () => {
                         <li><Link to="/dashboard" className={isActive('/dashboard') ? 'active' : ''}>
                             <i className="nav-icon dashboard-icon"></i>Dashboard
                         </Link></li>
-                        <li><Link to="/placeorder" className={isActive('/placeorder') ? 'active' : ''}>
-                            <i className="nav-icon order-icon"></i>Place Order
-                        </Link></li>
+
+                        {/* Show Place Order only for non-admin users */}
+                        {user?.user_type !== 'A' && (
+                            <li><Link to="/placeorder" className={isActive('/placeorder') ? 'active' : ''}>
+                                <i className="nav-icon order-icon"></i>Place Order
+                            </Link></li>
+                        )}
+
                         {user?.user_type === 'A' && (
                             <>
                                 <li><Link to="/vieworder" className={isActive('/vieworder') ? 'active' : ''}>
@@ -64,17 +69,17 @@ const Header = () => {
                         )}
                     </ul>
                 </div>
-                
+
                 {/* Account Section */}
                 <div className="nav-section collapsible">
-                    <div 
+                    <div
                         className={`section-header ${expandedSections.account ? 'expanded' : ''}`}
                         onClick={() => toggleSection('account')}
                     >
                         <span>Account</span>
                         <i className="toggle-icon"></i>
                     </div>
-                    
+
                     <ul className={`submenu ${expandedSections.account ? 'expanded' : ''}`}>
                         <li><Link to="/viewprofile" className={isActive('/viewprofile') ? 'active' : ''}>
                             <i className="nav-icon profile-icon"></i>Profile
@@ -84,18 +89,18 @@ const Header = () => {
                         </Link></li>
                     </ul>
                 </div>
-                
+
                 {/* Admin Tools Section - Only for admin users */}
                 {user?.user_type === 'A' && (
                     <div className="nav-section collapsible">
-                        <div 
+                        <div
                             className={`section-header ${expandedSections.adminTools ? 'expanded' : ''}`}
                             onClick={() => toggleSection('adminTools')}
                         >
                             <span>Admin Tools</span>
                             <i className="toggle-icon"></i>
                         </div>
-                        
+
                         <ul className={`submenu ${expandedSections.adminTools ? 'expanded' : ''}`}>
                             <li><Link to="/receivefish" className={isActive('/receivefish') ? 'active' : ''}>
                                 <i className="nav-icon receive-icon"></i>Receiving
@@ -112,7 +117,7 @@ const Header = () => {
                         </ul>
                     </div>
                 )}
-                
+
                 {/* Logout Button */}
                 <div className="nav-section logout-section">
                     <button className="logout-button" onClick={logout}>

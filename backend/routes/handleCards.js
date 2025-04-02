@@ -99,4 +99,91 @@ router.get('/getCards/:userName', async (req, res) => {
     }
 });
 
+// Get all cards in the system (admin only)
+// Updated cards controller with improved error handling
+
+// Get all cards (admin endpoint)
+router.get('/getAllCards', async (req, res) => {
+    logger.routeCalled(req, ROUTE_NAME);
+    try {
+        // Log incoming request for debugging
+        logger.action(ROUTE_NAME, 'Admin fetching all cards');
+        console.log("Fetching all cards for admin");
+
+        // Execute query - adapt this to match your actual database structure
+        const [cards] = await db.query(`
+            SELECT * FROM cards
+        `);
+
+        // Transform the results to match what the frontend expects
+        const formattedCards = cards.map(card => ({
+            payment_type_id: card.id || card.payment_type_id || card.card_id, // Try different possible ID column names
+            card_number: card.card_number,
+            card_holder_name: card.card_holder_name,
+            postal_code: card.postal_code
+        }));
+
+        // Log results for debugging
+        console.log(`Found ${cards.length} cards in the system`);
+        if (cards.length > 0) {
+            console.log(`Sample card (transformed): ${JSON.stringify(formattedCards[0])}`);
+        }
+
+        logger.action(ROUTE_NAME, 'All cards retrieved successfully', { count: cards.length });
+
+        // Return results
+        res.status(200).json(formattedCards || []);
+    } catch (err) {
+        logger.error(ROUTE_NAME, 'Error fetching all cards', err);
+        console.error('Error fetching all cards:', err);
+        res.status(500).json({ error: 'Internal Server Error', message: err.message });
+    }
+});
+
+// Get user cards endpoint
+router.get('/getCards/:userName', async (req, res) => {
+    logger.routeCalled(req, ROUTE_NAME);
+    try {
+        const { userName } = req.params;
+
+        if (!userName) {
+            return res.status(400).json({ error: 'User name is required' });
+        }
+
+        logger.action(ROUTE_NAME, 'Fetching cards for specific user', { userName });
+        console.log(`Fetching cards for user: ${userName}`);
+
+        // Execute query - adapt this to match your actual database structure
+        const [cards] = await db.query(`
+            SELECT * FROM cards 
+            WHERE card_holder_name = ?
+        `, [userName]);
+
+        // Transform the results to match what the frontend expects
+        const formattedCards = cards.map(card => ({
+            payment_type_id: card.id || card.payment_type_id || card.card_id, // Try different possible ID column names
+            card_number: card.card_number,
+            card_holder_name: card.card_holder_name,
+            postal_code: card.postal_code
+        }));
+
+        // Log results
+        console.log(`Found ${cards.length} cards for user ${userName}`);
+        if (cards.length > 0) {
+            console.log(`Sample card (transformed): ${JSON.stringify(formattedCards[0])}`);
+        }
+
+        logger.action(ROUTE_NAME, 'User cards retrieved successfully', {
+            userName,
+            count: cards.length
+        });
+
+        return res.status(200).json(formattedCards);
+    } catch (err) {
+        logger.error(ROUTE_NAME, 'Error fetching user cards', err);
+        console.error('Error fetching user cards:', err);
+        return res.status(500).json({ error: 'Internal Server Error', message: err.message });
+    }
+});
+
 module.exports = router;
